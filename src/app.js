@@ -3,6 +3,7 @@ require('dotenv').config({ path: path.resolve(__dirname, '.env') });
 
 const { registerValidation } = require("./validation");
 const express = require("express");
+const cors = require("cors");
 const mongoose = require("mongoose");
 
 require("./models/User");
@@ -11,6 +12,15 @@ const User = mongoose.model("user");
 const app = express();
 
 app.use(express.json());
+
+app.use((req, res, next) => {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Methods", "GET , PUT , POST , DELETE");
+    res.header("Access-Control-Allow-Headers", "Content-Type, x-requested-with");
+    next(); // Important
+});
+
+app.use(cors());
 
 mongoose.connect(process.env.MONGO,{
     useNewUrlParser: true,
@@ -25,7 +35,7 @@ app.post("/register", async (req, res) => {
     const emailExist = await User.findOne({ email: req.body.email });
     if (emailExist) return res.status(400).send("Email already exists");
   
-    var { name, email, telefone, linkedin, cidade, portfolio, salario } = req.body;
+    var { name, email, telefone, linkedin, cidade, portfolio, disponibilidade, horario,  salario, ionic} = req.body;
 
     var user = {
       name: name,
@@ -34,7 +44,10 @@ app.post("/register", async (req, res) => {
       linkedin: linkedin,
       cidade: cidade,
       portfolio: portfolio,
-      salario: salario
+      disponibilidade: disponibilidade,
+      horario: horario,
+      salario: salario,
+      ionic: ionic
     };
     var user = User.create(user, (err) => {
       if (err)

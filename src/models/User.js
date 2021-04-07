@@ -1,7 +1,6 @@
 const mongoose = require('mongoose');
 var uuid = require('node-uuid');
 
-
 const User = new mongoose.Schema({
     uuid: {
         type: String,
@@ -31,11 +30,23 @@ const User = new mongoose.Schema({
     portfolio: {
         type: String,
         required: false
-    },          
-    salario: {
+    }, 
+    disponibilidade: {
         type: String,
+        required: false
+    },   
+    horario: {
+        type: String,        
+        required: false
+    },                     
+    salario: {
+        type: Number,
         required: true
     }, 
+    ionic: {
+        type: Number,        
+        required: true
+    }                                                             
 },
 {
     timestamps: true,
