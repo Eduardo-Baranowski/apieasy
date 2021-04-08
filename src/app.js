@@ -62,6 +62,44 @@ app.post("/register", async (req, res) => {
     });
 });
 
+app.get("/users", async (req, res) => {
+  const users = await User.find();
+  return res.json(users);
+});
+
+app.get("/users/:id", async (req, res) => {
+  const { id } = req.params;
+  const user = await User.findOne({ uuid: id });
+  console.log(user);
+  return res.json(user);
+});
+
+app.put("/users/:id", async (req, res) => {
+  const { id } = req.params;
+  const { name, email, telefone, linkedin, cidade, portfolio, disponibilidade, horario, salario, ionic} = req.body;
+  const update = {
+    name: name,
+    email: email,
+    telefone: telefone,
+    linkedin: linkedin,
+    cidade: cidade,
+    portfolio: portfolio,
+    disponibilidade: disponibilidade,
+    horario: horario,
+    salario: salario,
+    ionic: ionic
+  };
+  let user = await User.findOneAndUpdate({ uuid: id }, update);
+  console.log(user);
+  return res.json(user);
+});
+
+app.delete("/users/:id", async (req, res) => {
+  const { id } = req.params;
+  User.findOne({ uuid: id }).deleteOne().exec();  
+  return res.status(204).send();
+});
+
 app.listen(8080, () => {
     console.log("Server up and run in 8080: http://localhost:8080");
 });
